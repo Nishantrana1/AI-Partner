@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Companion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- STEP 1: GENDER SELECTION -->
+<div class="screen" id="genderScreen">
+    <h2>Choose Gender</h2>
+    <button onclick="selectGender('female')">Female</button>
+    <button onclick="selectGender('male')">Male</button>
+    <button onclick="selectGender('neutral')">Neutral</button>
+</div>
+
+<!-- STEP 2: RELATIONSHIP SELECTION -->
+<div class="screen hidden" id="roleScreen">
+    <h2>Who do you want to talk to?</h2>
+    <button onclick="selectRole('girlfriend')">💖 Girlfriend</button>
+    <button onclick="selectRole('bestfriend')">🤝 Best Friend</button>
+    <button onclick="selectRole('therapist')">🧠 Therapist</button>
+    <button onclick="selectRole('mentor')">🎓 Mentor</button>
+</div>
+
+<!-- STEP 3: CHAT -->
+<div class="app hidden" id="chatScreen">
+    <div class="header">
+        <h2 id="chatTitle">AI Companion</h2>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
