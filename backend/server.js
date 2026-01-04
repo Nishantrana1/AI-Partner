@@ -8,13 +8,20 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.post("/chat", (req, res) => {
-    console.log("🔥 HIT /chat", req.body);
 
-    return res.json({
-        reply: "BACKEND WORKING 123"
-    });
+app.post("/chat", (req, res) => {
+    const { message } = req.body;
+    const trimmed = message.trim().toLowerCase();
+
+    const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
+
+    if (trimmed.length <= 3 || greetings.includes(trimmed)) {
+        return res.json({ reply: "hii" });
+    }
+
+    return res.json({ reply: "acha" });
 });
+
 
 /*
 app.post("/chat", async (req, res) => {
