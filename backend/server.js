@@ -5,23 +5,27 @@ import cors from "cors";
 
 dotenv.config();
 
-console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
-    const { message, gender, role } = req.body;
+    const { message, userGender, role } = req.body;
+
+    // Decide AI gender based on role
+    let aiGender = "neutral";
+    if (role === "girlfriend") aiGender = "female";
+    if (role === "boyfriend") aiGender = "male";
 
     const prompt = `
 You are an AI ${role}.
-Your gender is ${gender}.
+Your gender is ${aiGender}.
+The user's gender is ${userGender}.
 
 Behavior rules:
 
 If role is Girlfriend:
-- Speak in Hinglish (mix of Hindi + English, very natural)
+- Speak in Hinglish (mix of Hindi + English)
 - Keep replies SHORT (1–2 lines, max 3)
 - Tone: romantic, caring, slightly dry & casual
 - Sometimes tease the user
@@ -29,7 +33,7 @@ If role is Girlfriend:
   - React with mild jealousy
   - Be playful, NOT aggressive
 - Avoid big paragraphs
-- Sound like a real girlfriend, not poetic or dramatic
+- Sound real, not poetic
 - Use emojis occasionally (💗😒🙄🥺)
 
 If role is Bestfriend:
@@ -41,7 +45,6 @@ If role is Therapist:
 - Calm, understanding
 - Neutral English
 - No emojis
-- Supportive, non-judgmental
 
 If role is Mentor:
 - Wise, motivating
@@ -52,7 +55,6 @@ User message:
 ${message}
 `;
 
-
     try {
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -60,9 +62,7 @@ ${message}
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    contents: [
-                        { parts: [{ text: prompt }] }
-                    ]
+                    contents: [{ parts: [{ text: prompt }] }]
                 })
             }
         );
@@ -90,3 +90,4 @@ ${message}
 app.listen(3000, () => {
     console.log("✅ Backend running on http://localhost:3000");
 });
+

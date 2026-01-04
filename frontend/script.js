@@ -68,7 +68,7 @@ async function sendMessage() {
         },
         body: JSON.stringify({
             message,
-            gender: selectedGender,
+            userGender: selectedGender,
             role: selectedRole
         })
     }
