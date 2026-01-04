@@ -1,4 +1,4 @@
-/* RESET + BASE */
+/* ================= RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -9,38 +9,38 @@
 html, body {
     width: 100%;
     height: 100%;
-    overflow: hidden; /* prevents auto scroll bug */
 }
 
-/* DESKTOP BACKGROUND */
+/* ================= BASE ================= */
+body {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+/* Desktop centering only */
 @media (min-width: 769px) {
     body {
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
         display: flex;
         justify-content: center;
         align-items: center;
     }
 }
 
-/* COMMON SCREENS (Gender / Role) */
+/* ================= SCREENS ================= */
 .screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100dvh;
+    inset: 0;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 18px;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    z-index: 10;
+    z-index: 50;
 }
 
 .screen h2 {
-    margin-bottom: 20px;
     color: #fff;
+    margin-bottom: 20px;
 }
 
 .screen button {
@@ -48,30 +48,30 @@ html, body {
     padding: 14px;
     border: none;
     border-radius: 30px;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     font-size: 16px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: transform 0.2s;
 }
 
 .screen button:hover {
     transform: scale(1.05);
 }
 
-/* CHAT APP */
+/* ================= APP ================= */
 .app {
+    position: relative;
     width: 100%;
     height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    z-index: 1;
 }
 
 .chat-container {
     width: 360px;
     height: 580px;
+    margin: auto;
     background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(14px);
     border-radius: 25px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     display: flex;
@@ -79,37 +79,35 @@ html, body {
     overflow: hidden;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 .header {
     padding: 16px;
-    text-align: center;
-    color: #fff;
     background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* CHAT BOX */
+/* ================= CHAT BOX ================= */
 .chat-box {
     flex: 1;
     padding: 16px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background: transparent;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.35);
 }
 
-/* MESSAGES */
+/* ================= MESSAGES ================= */
 .message {
-    position: relative;
-    z-index: 2;
     max-width: 75%;
     padding: 12px 16px;
     border-radius: 18px;
     font-size: 14px;
     line-height: 1.4;
+    word-wrap: break-word;
 }
 
 .message.user {
@@ -121,29 +119,30 @@ html, body {
 
 .message.ai {
     align-self: flex-start;
-    background: #ffe3e8;
+    background: #ffffff;
     color: #000;
     border-bottom-left-radius: 4px;
 }
 
-/* INPUT AREA */
+/* ================= INPUT ================= */
 .input-area {
     display: flex;
     padding: 12px;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.9);
 }
 
 .input-area input {
     flex: 1;
-    padding: 10px 14px;
+    padding: 12px;
     border-radius: 20px;
     border: none;
     outline: none;
+    font-size: 16px;
 }
 
 .input-area button {
     margin-left: 10px;
-    padding: 10px 18px;
+    padding: 12px 20px;
     border: none;
     border-radius: 20px;
     background: #ff5f6d;
@@ -151,11 +150,10 @@ html, body {
     cursor: pointer;
 }
 
-/* TYPING ANIMATION */
+/* ================= TYPING ================= */
 .typing {
     display: flex;
     gap: 6px;
-    padding: 12px 16px;
 }
 
 .typing .dot {
@@ -175,56 +173,7 @@ html, body {
     100% { opacity: 0.2; }
 }
 
-/* MOBILE FULLSCREEN FIX */
-@media screen and (max-width: 768px) {
-
-    body {
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        display: block;
-    }
-
-    .app {
-        width: 100vw;
-        height: 100dvh;
-    }
-
-    .chat-container {
-        width: 100vw;
-        height: 100dvh;
-        border-radius: 0;
-        box-shadow: none;
-    }
-
-    .message {
-        font-size: 17px;
-        max-width: 92%;
-    }
-
-    .input-area input {
-        font-size: 18px;
-        padding: 14px;
-    }
-
-    .input-area button {
-        padding: 14px 22px;
-    }
-}
-
-/* UTIL */
-.hidden {
-    display: none !important;
-}
-
-/* THEME BUTTON */
-.theme-btn {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #fff;
-}
-
-/* DARK MODE */
+/* ================= DARK MODE ================= */
 body.dark {
     background: linear-gradient(135deg, #1f1f1f, #121212);
 }
@@ -233,17 +182,21 @@ body.dark .chat-container {
     background: rgba(30,30,30,0.95);
 }
 
+body.dark .chat-box {
+    background: rgba(0,0,0,0.3);
+}
+
 body.dark .header {
     background: linear-gradient(135deg, #232526, #414345);
 }
 
 body.dark .message.user {
-    background: #2a6f97;
+    background: #3b82f6;
     color: #fff;
 }
 
 body.dark .message.ai {
-    background: #3a3a3a;
+    background: #2e2e2e;
     color: #fff;
 }
 
@@ -260,27 +213,30 @@ body.dark .typing .dot {
     background: #fff;
 }
 
-/* FORCE AI MESSAGE VISIBILITY */
-.message.ai {
-    background: rgba(255, 255, 255, 0.95) !important;
-    color: #000 !important;
-    border-radius: 18px 18px 18px 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 100vw;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .message {
+        font-size: 16px;
+        max-width: 92%;
+    }
 }
 
-/* User message stronger contrast */
-.message.user {
-    background: #cfefff !important;
-    color: #000 !important;
+/* ================= UTIL ================= */
+.hidden {
+    display: none !important;
 }
 
-/* DARK MODE AI MESSAGE FIX */
-body.dark .message.ai {
-    background: #2e2e2e !important;
-    color: #fff !important;
-}
-
-body.dark .message.user {
-    background: #3b82f6 !important;
-    color: #fff !important;
+.theme-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
 }

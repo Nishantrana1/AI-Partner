@@ -31,6 +31,8 @@ function selectRole(role) {
 let typingInterval = null;
 // Typing animation
 function showTyping() {
+    hideTyping(); // 🔥 ensure no duplicate typing bubble
+
     const typingDiv = document.createElement("div");
     typingDiv.className = "message ai typing";
     typingDiv.id = "typingIndicator";
@@ -43,10 +45,14 @@ function showTyping() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+
 function hideTyping() {
     const typing = document.getElementById("typingIndicator");
-    if (typing) typing.remove();
+    if (typing && typing.parentNode) {
+        typing.parentNode.removeChild(typing);
+    }
 }
+
 
 // CHAT
 async function sendMessage() {
@@ -75,15 +81,20 @@ async function sendMessage() {
 );
 
         const data = await response.json();
-        hideTyping();
-        addMessage(data.reply, "ai");
+hideTyping();
 
+if (data && data.reply && data.reply.trim() !== "") {
+    addMessage(data.reply, "ai");
+} else {
+    addMessage("💔 Sorry, I couldn’t think of a reply.", "ai");
+}
 
     } catch (error) {
     console.error(error);
     hideTyping();
-    addMessage("Sorry 😔 I couldn’t reply.", "ai");
+    addMessage("😔 Sorry, something went wrong.", "ai");
 }
+
 
 }
 
