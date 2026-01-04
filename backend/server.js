@@ -20,14 +20,12 @@ app.use(express.json());
 
 app.post("/chat", async (req, res) => {
     const { message, gender, role } = req.body;
-
     const trimmed = message.trim().toLowerCase();
 
     // ===============================
-    // 1️⃣ GREETING HANDLER (NO GEMINI)
+    // 1️⃣ GREETINGS (NO GEMINI)
     // ===============================
     const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
-
     if (trimmed.length <= 3 || greetings.includes(trimmed)) {
         return res.json({ reply: "hii" });
     }
@@ -42,7 +40,20 @@ app.post("/chat", async (req, res) => {
         trimmed.startsWith("kaise");
 
     // ===============================
-    // 3️⃣ AI CONFIG
+    // 3️⃣ SHORT / LOW-DEPTH MESSAGES
+    // ===============================
+    if (trimmed.length < 10) {
+        const neutral = ["acha", "haan", "theek"];
+        const question = ["tum hi bato", "shayad", "ho sakta hai"];
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        return res.json({
+            reply: isQuestion ? pick(question) : pick(neutral)
+        });
+    }
+
+    // ===============================
+    // 4️⃣ GEMINI (ONLY FOR REAL MESSAGES)
     // ===============================
     let aiGender = "neutral";
     if (role === "girlfriend") aiGender = "female";
@@ -54,9 +65,10 @@ Your gender is ${aiGender}.
 The user's gender is ${gender}.
 
 Behave like a real human.
-Be casual and slightly dry.
-No emotional escalation.
-Speak Hinglish if girlfriend.
+respect,romantic, casual, Hinglish if girlfriend.
+Do NOT over-invest.
+Keep replies short (1–3 lines max).
+No poetic language.
 
 User message:
 ${message}
@@ -104,6 +116,13 @@ ${message}
         res.json({ reply: "acha" });
     }
 });
+
+
+
+
+
+
+
 
 app.listen(3000, () => {
     console.log("✅ Backend running on http://localhost:3000");
