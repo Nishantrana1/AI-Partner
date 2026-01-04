@@ -9,18 +9,38 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 app.post("/chat", (req, res) => {
     const { message } = req.body;
     const trimmed = message.trim().toLowerCase();
 
+    // 1️⃣ Greetings (no effort)
     const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
-
     if (trimmed.length <= 3 || greetings.includes(trimmed)) {
         return res.json({ reply: "hii" });
     }
 
-    return res.json({ reply: "acha" });
+    // 2️⃣ Question detection
+    const isQuestion =
+        trimmed.endsWith("?") ||
+        trimmed.startsWith("kya") ||
+        trimmed.startsWith("kyu") ||
+        trimmed.startsWith("kaise");
+
+    // 3️⃣ Human dry fallbacks
+    const neutral = ["acha", "haan", "theek"];
+    const question = ["tu hi bata", "shayad", "ho sakta hai"];
+
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    return res.json({
+        reply: isQuestion ? pick(question) : pick(neutral)
+    });
 });
+
+
+
 
 
 /*
