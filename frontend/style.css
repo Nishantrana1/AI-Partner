@@ -98,10 +98,13 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background: transparent;
 }
 
 /* MESSAGES */
 .message {
+    position: relative;
+    z-index: 2;
     max-width: 75%;
     padding: 12px 16px;
     border-radius: 18px;
@@ -255,4 +258,29 @@ body.dark .input-area input {
 
 body.dark .typing .dot {
     background: #fff;
+}
+
+/* FORCE AI MESSAGE VISIBILITY */
+.message.ai {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #000 !important;
+    border-radius: 18px 18px 18px 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* User message stronger contrast */
+.message.user {
+    background: #cfefff !important;
+    color: #000 !important;
+}
+
+/* DARK MODE AI MESSAGE FIX */
+body.dark .message.ai {
+    background: #2e2e2e !important;
+    color: #fff !important;
+}
+
+body.dark .message.user {
+    background: #3b82f6 !important;
+    color: #fff !important;
 }
