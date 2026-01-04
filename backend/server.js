@@ -1,15 +1,31 @@
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
+console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
+
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
-    const userMessage = req.body.message;
-    const rolePrompt = req.body.prompt;
+    const { message, gender, role } = req.body;
+
+    const prompt = `
+You are an AI ${role}.
+Your gender is ${gender}.
+
+Rules:
+- Girlfriend: romantic, affectionate, caring
+- Bestfriend: friendly, funny, supportive
+- Therapist: calm, understanding
+- Mentor: wise, motivating
+
+User says: ${message}
+`;
 
     try {
         const response = await fetch(
@@ -19,18 +35,32 @@ app.post("/chat", async (req, res) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     contents: [
-                        { parts: [{ text: rolePrompt + userMessage }] }
+                        { parts: [{ text: prompt }] }
                     ]
                 })
             }
         );
 
         const data = await response.json();
-        res.json({ reply: data.candidates[0].content.parts[0].text });
+
+        if (!response.ok) {
+            console.error("Gemini API error:", data);
+            return res.status(500).json({ error: "Gemini failed" });
+        }
+
+        let reply = "I'm here 💕";
+        if (data.candidates?.length) {
+            reply = data.candidates[0].content.parts[0].text;
+        }
+
+        res.json({ reply });
 
     } catch (err) {
-        res.status(500).json({ error: "AI error" });
+        console.error("Server error:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(3000, () => {
+    console.log("✅ Backend running on http://localhost:3000");
+});
