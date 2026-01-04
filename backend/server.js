@@ -29,13 +29,10 @@ You are an AI ${role}.
 Your gender is ${aiGender}.
 The user's gender is ${gender}.
 
-Speak naturally like a stable human.
-Be clear, coherent, and responsive.
-No dry looping replies.
-No filler like "hmm", "haan", "tum hi bata".
-Reply properly to what the user says.
-Keep replies short but meaningful.
-Use Hinglish only if it fits naturally.
+Speak naturally and clearly.
+Reply properly to the user's message.
+No looping, no filler, no nonsense.
+Keep replies short and meaningful.
 
 User message:
 ${message}
@@ -53,24 +50,38 @@ ${message}
             }
         );
 
-        const data = await response.json();
+        // 🔴 IMPORTANT: CHECK STATUS
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Gemini API ERROR:", errorText);
 
-        let reply =
-            data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            return res.json({
+                reply: "Server issue. Try again in a moment."
+            });
+        }
+
+        const data = await response.json();
+        console.log("Gemini RAW RESPONSE:", JSON.stringify(data, null, 2));
+
+        const reply =
+            data.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!reply || reply.trim() === "") {
-            reply = "I didn’t get that clearly. Can you say it again?";
+            return res.json({
+                reply: "Can you explain that a bit more?"
+            });
         }
 
         res.json({ reply });
 
     } catch (err) {
-        console.error("Gemini error:", err);
+        console.error("Backend crash:", err);
         res.json({
             reply: "Something went wrong. Try again."
         });
     }
 });
+
 
 
 
