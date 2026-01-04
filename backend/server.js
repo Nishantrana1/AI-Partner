@@ -11,39 +11,13 @@ app.use(express.json());
 
 
 
-app.post("/chat", (req, res) => {
-    const { message } = req.body;
-    const trimmed = message.trim().toLowerCase();
-
-    // 1️⃣ Greetings (no effort)
-    const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
-    if (trimmed.length <= 3 || greetings.includes(trimmed)) {
-        return res.json({ reply: "hii" });
-    }
-
-    // 2️⃣ Question detection
-    const isQuestion =
-        trimmed.endsWith("?") ||
-        trimmed.startsWith("kya") ||
-        trimmed.startsWith("kyu") ||
-        trimmed.startsWith("kaise");
-
-    // 3️⃣ Human dry fallbacks
-    const neutral = ["acha", "haan", "theek"];
-    const question = ["tu hi bata", "shayad", "ho sakta hai"];
-
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-    return res.json({
-        reply: isQuestion ? pick(question) : pick(neutral)
-    });
-});
 
 
 
 
 
-/*
+
+
 app.post("/chat", async (req, res) => {
     const { message, gender, role } = req.body;
 
@@ -129,7 +103,7 @@ ${message}
         console.error("Backend error:", err);
         res.json({ reply: "acha" });
     }
-});*/
+});
 
 app.listen(3000, () => {
     console.log("✅ Backend running on http://localhost:3000");
