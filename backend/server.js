@@ -8,25 +8,40 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.post("/chat", (req, res) => {
+    console.log("🔥 HIT /chat", req.body);
 
+    return res.json({
+        reply: "BACKEND WORKING 123"
+    });
+});
+
+/*
 app.post("/chat", async (req, res) => {
     const { message, gender, role } = req.body;
 
-    // ===============================
-    // 🔒 STEP 1: LOW-EFFORT GUARD
-    // ===============================
     const trimmed = message.trim().toLowerCase();
 
-    const lowEffort = [
-        "hi", "hii", "hello", "hey", "hlo", "yo", "hlooo"
-    ];
+    // ===============================
+    // 1️⃣ GREETING HANDLER (NO GEMINI)
+    // ===============================
+    const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
 
-    if (trimmed.length <= 3 || lowEffort.includes(trimmed)) {
-        return res.json({ reply: "hii" }); // 👈 NO GEMINI CALL
+    if (trimmed.length <= 3 || greetings.includes(trimmed)) {
+        return res.json({ reply: "hii" });
     }
 
     // ===============================
-    // STEP 2: AI CONFIG
+    // 2️⃣ QUESTION DETECTION
+    // ===============================
+    const isQuestion =
+        trimmed.endsWith("?") ||
+        trimmed.startsWith("kya") ||
+        trimmed.startsWith("kyu") ||
+        trimmed.startsWith("kaise");
+
+    // ===============================
+    // 3️⃣ AI CONFIG
     // ===============================
     let aiGender = "neutral";
     if (role === "girlfriend") aiGender = "female";
@@ -37,12 +52,10 @@ You are an AI ${role}.
 Your gender is ${aiGender}.
 The user's gender is ${gender}.
 
-Behave like a REAL human.
-Do NOT over-invest.
-Do NOT escalate emotionally.
-Keep replies short and casual.
+Behave like a real human.
+Be casual and slightly dry.
+No emotional escalation.
 Speak Hinglish if girlfriend.
-Never be poetic or dramatic.
 
 User message:
 ${message}
@@ -72,19 +85,24 @@ ${message}
         }
 
         // ===============================
-        // STEP 3: HUMAN FALLBACK
+        // 4️⃣ SMART FALLBACKS
         // ===============================
+        const neutralFallbacks = ["acha", "haan", "bol", "theek"];
+        const questionFallbacks = ["kya lagta hai", "shayad", "tu hi bata"];
+
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
         if (!reply || reply.trim() === "") {
-            reply = "hmm";
+            reply = isQuestion ? pick(questionFallbacks) : pick(neutralFallbacks);
         }
 
         res.json({ reply });
 
     } catch (err) {
         console.error("Backend error:", err);
-        res.json({ reply: "hmm" });
+        res.json({ reply: "acha" });
     }
-});
+});*/
 
 app.listen(3000, () => {
     console.log("✅ Backend running on http://localhost:3000");
