@@ -22,38 +22,8 @@ app.post("/chat", async (req, res) => {
     const { message, gender, role } = req.body;
     const trimmed = message.trim().toLowerCase();
 
-    // ===============================
-    // 1️⃣ GREETINGS (NO GEMINI)
-    // ===============================
-    const greetings = ["hi", "hii", "hello", "hey", "hlo", "yo"];
-    if (trimmed.length <= 3 || greetings.includes(trimmed)) {
-        return res.json({ reply: "hii" });
-    }
 
-    // ===============================
-    // 2️⃣ QUESTION DETECTION
-    // ===============================
-    const isQuestion =
-        trimmed.endsWith("?") ||
-        trimmed.startsWith("kya") ||
-        trimmed.startsWith("kyu") ||
-        trimmed.startsWith("kaise");
-
-    // ===============================
-    // 3️⃣ SHORT / LOW-DEPTH MESSAGES
-    // ===============================
-    if (trimmed.length < 10) {
-        const neutral = ["acha", "haan", "theek"];
-        const question = ["tum hi bato", "shayad", "ho sakta hai"];
-        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-        return res.json({
-            reply: isQuestion ? pick(question) : pick(neutral)
-        });
-    }
-
-    // ===============================
-    // 4️⃣ GEMINI (ONLY FOR REAL MESSAGES)
+  
     // ===============================
     let aiGender = "neutral";
     if (role === "girlfriend") aiGender = "female";
