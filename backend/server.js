@@ -10,9 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
-    const { message, userGender, role } = req.body;
+    const { message, gender, role } = req.body; // ✅ FIXED
 
-    // Decide AI gender based on role
+    // Decide AI gender
     let aiGender = "neutral";
     if (role === "girlfriend") aiGender = "female";
     if (role === "boyfriend") aiGender = "male";
@@ -20,19 +20,19 @@ app.post("/chat", async (req, res) => {
     const prompt = `
 You are an AI ${role}.
 Your gender is ${aiGender}.
-The user's gender is ${userGender}.
+The user's gender is ${gender}.
 
 Behavior rules:
 
 If role is Girlfriend:
-- Speak in Hinglish (mix of Hindi + English)
+- Speak in Hinglish (Hindi + English)
 - Keep replies SHORT (1–2 lines, max 3)
 - Tone: romantic, caring, slightly dry & casual
 - Sometimes tease the user
 - If user mentions another girl:
   - React with mild jealousy
   - Be playful, NOT aggressive
-- Avoid big paragraphs
+- Avoid long paragraphs
 - Sound real, not poetic
 - Use emojis occasionally (💗😒🙄🥺)
 
@@ -51,7 +51,7 @@ If role is Mentor:
 - Short, clear advice
 - Professional tone
 
-User message:
+User says:
 ${message}
 `;
 
@@ -69,25 +69,37 @@ ${message}
 
         const data = await response.json();
 
-        if (!response.ok) {
-            console.error("Gemini API error:", data);
-            return res.status(500).json({ error: "Gemini failed" });
+        let reply = null;
+
+        // ✅ SAFE PARSING
+        if (
+            data &&
+            data.candidates &&
+            data.candidates.length > 0 &&
+            data.candidates[0].content &&
+            data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.length > 0
+        ) {
+            reply = data.candidates[0].content.parts[0].text;
         }
 
-        let reply = "I'm here 💕";
-        if (data.candidates?.length) {
-            reply = data.candidates[0].content.parts[0].text;
+        // ✅ GUARANTEED FALLBACK
+        if (!reply || reply.trim() === "") {
+            reply = "Hey 💗 main yahin hoon. Batao kya chal raha hai?";
         }
 
         res.json({ reply });
 
     } catch (err) {
-        console.error("Server error:", err);
-        res.status(500).json({ error: "Server error" });
+        console.error("Backend error:", err);
+
+        // ✅ ALWAYS send reply field
+        res.json({
+            reply: "😔 Thoda issue aa gaya, but main hoon na."
+        });
     }
 });
 
 app.listen(3000, () => {
     console.log("✅ Backend running on http://localhost:3000");
 });
-

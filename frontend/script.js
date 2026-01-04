@@ -65,7 +65,7 @@ async function sendMessage() {
 
 
     try {
-      const response = await fetch(
+     const response = await fetch(
     "https://ai-partner-evvf.onrender.com/chat",
     {
         method: "POST",
@@ -74,13 +74,25 @@ async function sendMessage() {
         },
         body: JSON.stringify({
             message,
-            userGender: selectedGender,
+            gender: selectedGender,   // ✅ FIXED
             role: selectedRole
         })
     }
 );
 
-        const data = await response.json();
+
+const rawText = await response.text();
+console.log("RAW BACKEND RESPONSE:", rawText);
+
+let data;
+try {
+    data = JSON.parse(rawText);
+} catch (e) {
+    console.error("JSON parse failed");
+    data = {};
+}
+
+
 hideTyping();
 
 if (data && data.reply && data.reply.trim() !== "") {
@@ -94,7 +106,6 @@ if (data && data.reply && data.reply.trim() !== "") {
     hideTyping();
     addMessage("😔 Sorry, something went wrong.", "ai");
 }
-
 
 }
 
