@@ -10,9 +10,9 @@
 <!-- STEP 1: GENDER SELECTION -->
 <div class="screen" id="genderScreen">
     <h2>Choose Gender</h2>
-    <button onclick="selectGender('female')">Female</button>
     <button onclick="selectGender('male')">Male</button>
-    <button onclick="selectGender('neutral')">Neutral</button>
+    <button onclick="selectGender('female')">Female</button>
+    
 </div>
 
 <!-- STEP 2: RELATIONSHIP SELECTION -->
@@ -26,17 +26,20 @@
 
 <!-- STEP 3: CHAT -->
 <div class="app hidden" id="chatScreen">
-    <div class="header">
-        <h2 id="chatTitle">AI Companion</h2>
-    </div>
+    <div class="chat-container">
+        <div class="header">
+            <h2 id="chatTitle">💖 Your AI Girlfriend</h2>
+        </div>
 
-    <div class="chat-box" id="chatBox"></div>
+        <div class="chat-box" id="chatBox"></div>
 
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type a message..." />
-        <button onclick="sendMessage()">Send</button>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
 </div>
+
 
 <script src="script.js"></script>
 </body>
