@@ -59,18 +59,20 @@ async function sendMessage() {
 
 
     try {
-        const response = await fetch("https://ai-partner-evvf.onrender.com",{
-
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message,
-                gender: selectedGender,
-                role: selectedRole
-            })
-        });
+      const response = await fetch(
+    "https://ai-partner-evvf.onrender.com/chat",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message,
+            gender: selectedGender,
+            role: selectedRole
+        })
+    }
+);
 
         const data = await response.json();
         hideTyping();
