@@ -17,14 +17,9 @@ app.use(express.json());
 
 
 
-
 app.post("/chat", async (req, res) => {
     const { message, gender, role } = req.body;
-    const trimmed = message.trim().toLowerCase();
 
-
-  
-    // ===============================
     let aiGender = "neutral";
     if (role === "girlfriend") aiGender = "female";
     if (role === "boyfriend") aiGender = "male";
@@ -34,11 +29,13 @@ You are an AI ${role}.
 Your gender is ${aiGender}.
 The user's gender is ${gender}.
 
-Behave like a real human.
-respect,romantic, casual, Hinglish if girlfriend.
-Do NOT over-invest.
-Keep replies short (1–3 lines max).
-No poetic language.
+Speak naturally like a stable human.
+Be clear, coherent, and responsive.
+No dry looping replies.
+No filler like "hmm", "haan", "tum hi bata".
+Reply properly to what the user says.
+Keep replies short but meaningful.
+Use Hinglish only if it fits naturally.
 
 User message:
 ${message}
@@ -58,32 +55,20 @@ ${message}
 
         const data = await response.json();
 
-        let reply = null;
-
-        if (
-            data?.candidates?.length &&
-            data.candidates[0]?.content?.parts?.length
-        ) {
-            reply = data.candidates[0].content.parts[0].text;
-        }
-
-        // ===============================
-        // 4️⃣ SMART FALLBACKS
-        // ===============================
-        const neutralFallbacks = ["acha", "haan", "bol", "theek"];
-        const questionFallbacks = ["kya lagta hai", "shayad", "tu hi bata"];
-
-        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        let reply =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!reply || reply.trim() === "") {
-            reply = isQuestion ? pick(questionFallbacks) : pick(neutralFallbacks);
+            reply = "I didn’t get that clearly. Can you say it again?";
         }
 
         res.json({ reply });
 
     } catch (err) {
-        console.error("Backend error:", err);
-        res.json({ reply: "acha" });
+        console.error("Gemini error:", err);
+        res.json({
+            reply: "Something went wrong. Try again."
+        });
     }
 });
 
