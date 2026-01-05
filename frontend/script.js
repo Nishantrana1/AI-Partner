@@ -18,10 +18,10 @@ function selectRole(role) {
     document.getElementById("chatScreen").classList.remove("hidden");
 
     const titles = {
-        girlfriend: "💖 Your AI Girlfriend",
-        bestfriend: "🤝 Your AI Best Friend",
-        therapist: "🧠 Your AI Therapist",
-        mentor: "🎓 Your AI Mentor"
+        girlfriend: "💖 Your Girlfriend",
+        bestfriend: "🤝 Your Best Friend",
+        therapist: "🧠 Your Therapist",
+        mentor: "🎓 Your Mentor"
     };
 
     document.getElementById("chatTitle").innerText =

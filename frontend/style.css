@@ -60,10 +60,10 @@ body {
 
 /* ================= APP ================= */
 .app {
-    position: relative;
-    width: 100%;
-    height: 100dvh;
-    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;   
 }
 
 .chat-container {
